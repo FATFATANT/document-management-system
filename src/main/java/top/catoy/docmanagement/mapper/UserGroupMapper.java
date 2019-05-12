@@ -11,4 +11,6 @@ public interface UserGroupMapper {
 
     public UserGroup getUserGroupById(@Param("id") int id);
 
+    public int getUserGroupName(@Param("name") String name);
+
 }

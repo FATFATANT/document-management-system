@@ -11,8 +11,21 @@
         <result column="department_id" property="departmentId"></result>
         <result column="user_lock" property="userLock"></result>
         <result column="group_id" property="groupId"></result>
-
     </resultMap>
+
+    <insert id="insertUser" parameterType="top.catoy.docmanagement.domain.User">
+        INSERT INTO user(user_name,user_password,group_id,department_id,user_lock)VALUES (#{userName},#{userPassword},
+        #{groupId},#{departmentId},#{userLock})
+    </insert>
+
+    <update id="updateUser" parameterType="top.catoy.docmanagement.domain.User">
+        UPDATE `user` set user_name = #{userName},user_password = #{userPassword},group_id = #{groupId},department_id = #{departmentId},
+        user_lock = #{userLock} WHERE user_id = #{userId}
+    </update>
+
+    <delete id="deleteUserById">
+        delete from user where user_id = #{id}
+    </delete>
 
     <select id="getUserByName" parameterType="String" resultMap="UserMap">
         SELECT * FROM user WHERE user_name= #{userName}
@@ -20,6 +33,14 @@
 
     <select id="getAllUsers" resultMap="UserMap">
         SELECT * FROM user
+    </select>
+
+    <select id="selectUserById" parameterType="int" resultMap="UserMap">
+        SELECT * FROM user WHERE user_id=#{userId}
+    </select>
+
+    <select id="getIsLockedByUserName" resultType="java.lang.Integer">
+        select user_lock from user where user_name= #{name}
     </select>
 
 </mapper>

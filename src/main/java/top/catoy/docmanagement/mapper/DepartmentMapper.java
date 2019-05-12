@@ -17,4 +17,9 @@ public interface DepartmentMapper {
     int deleteDepartmentById(int id);
 
     List<Department> getAllDepartments();
+
+    public String getDepartmentNameById(int id);
+
+    public int getDepartmentIdByName(String name);
+
 }

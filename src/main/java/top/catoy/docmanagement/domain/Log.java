@@ -1,6 +1,6 @@
 package top.catoy.docmanagement.domain;
 
-import java.sql.Date;
+import java.util.Date;
 
 /**
  * @description: 日志
@@ -13,6 +13,7 @@ public class Log {
     private String opName;
     private Date opDate;
     private String opLabel;
+    private String userName;
 
     public int getLogId() {
         return logId;
@@ -54,6 +55,14 @@ public class Log {
         this.opLabel = opLabel;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
     @Override
     public String toString() {
         return "Log{" +
@@ -62,6 +71,7 @@ public class Log {
                 ", opName='" + opName + '\'' +
                 ", opDate=" + opDate +
                 ", opLabel='" + opLabel + '\'' +
+                ", userName='" + userName + '\'' +
                 '}';
     }
 }

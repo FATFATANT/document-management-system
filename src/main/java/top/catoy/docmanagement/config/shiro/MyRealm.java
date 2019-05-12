@@ -51,7 +51,7 @@ public class MyRealm extends AuthorizingRealm {
 
         User user = JWTUtil.getUserInfo(principals.toString());
 //        UserBean user = userService.getUser(username);
-        System.out.println(user+"-------------------------------------------------");
+        System.out.println(user+"-------------------------------------------------*************");
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
         simpleAuthorizationInfo.addRole(user.getRole());
         Set<String> permission = new HashSet<>(Arrays.asList(user.getPermission().split(",")));

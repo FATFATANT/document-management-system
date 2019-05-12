@@ -17,9 +17,13 @@ public class UserGroupServiceImpl implements UserGroupService {
         return userGroupMapper.getUserGroupById(id);
     }
 
-
     @Override
     public int updatePermission() {
         return 0;
+    }
+
+    @Override
+    public int getUserGroupIdByName(String name) {
+        return userGroupMapper.getUserGroupName(name);
     }
 }

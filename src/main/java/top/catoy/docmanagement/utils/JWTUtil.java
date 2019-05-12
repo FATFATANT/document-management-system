@@ -5,6 +5,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import org.springframework.beans.factory.annotation.Value;
 import top.catoy.docmanagement.domain.User;
 
 import java.io.UnsupportedEncodingException;
@@ -23,7 +24,8 @@ public class JWTUtil {
      */
     public static boolean verify(String token, String username, String secret) {
         try {
-            Algorithm algorithm = Algorithm.HMAC256(secret);
+            String scrt = "gaoxuSecret";
+            Algorithm algorithm = Algorithm.HMAC256(scrt);
             JWTVerifier verifier = JWT.require(algorithm)
                     .withClaim("username", username)
                     .build();

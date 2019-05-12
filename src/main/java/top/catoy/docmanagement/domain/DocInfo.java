@@ -1,5 +1,7 @@
 package top.catoy.docmanagement.domain;
 
+import java.util.List;
+
 /**
  * @description: 文档信息
  * @author: xjn
@@ -11,6 +13,17 @@ public class DocInfo {
     private String docSavePath;
     private int userId;
     private String suffixName;
+
+
+    private List<DocLabel> docLabels;
+
+    public List<DocLabel> getDocLabels() {
+        return docLabels;
+    }
+
+    public void setDocLabels(List<DocLabel> docLabels) {
+        this.docLabels = docLabels;
+    }
 
     public int getDocId() {
         return docId;
@@ -60,6 +73,7 @@ public class DocInfo {
                 ", docSavePath='" + docSavePath + '\'' +
                 ", userId=" + userId +
                 ", suffixName='" + suffixName + '\'' +
+                ", docLabels=" + docLabels +
                 '}';
     }
 }

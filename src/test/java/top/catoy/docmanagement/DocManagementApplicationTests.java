@@ -5,12 +5,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import top.catoy.docmanagement.domain.Department;
-import top.catoy.docmanagement.domain.DocLabel;
-import top.catoy.docmanagement.domain.Log;
-import top.catoy.docmanagement.mapper.DepartmentMapper;
-import top.catoy.docmanagement.mapper.DocLabelMapper;
-import top.catoy.docmanagement.mapper.LogMapper;
+import top.catoy.docmanagement.domain.*;
+import top.catoy.docmanagement.mapper.*;
+import top.catoy.docmanagement.service.DepartmentService;
 import top.catoy.docmanagement.service.DocLabelService;
 import top.catoy.docmanagement.service.LogService;
 
@@ -34,6 +31,18 @@ public class DocManagementApplicationTests {
     @Autowired
     private DocLabelService docLabelService;
 
+
+    @Autowired
+    private UserMapper userMapper;
+
+    @Autowired
+    private UserGroupMapper userGroupMapper;
+
+    @Autowired
+    private DepartmentService departmentService;
+
+
+
     @Test
     public void contextLoads() {
     }
@@ -51,26 +60,28 @@ public class DocManagementApplicationTests {
 
     @Test
     public void testLogService(){
-        int sun = 0;
-        sun = logService.insertLog(1,"删除用户","用户管理");
-        if(sun > 0){
-            System.out.println("日志插入成功");
-        }else {
-            System.out.println("日志插入失败");
-        }
-
+//        int sun = 0;
+//        ResponseBean responseBean = logService.insertLog(1,"删除用户","用户管理");
+//        if(sun > 0){
+//            System.out.println("日志插入成功");
+//        }else {
+//            System.out.println("日志插入失败");
+//        }
+//        ResponseBean responseBean = logService.getLogsBySearchParam("1",1,10);
+//        System.out.println(responseBean);
+//        System.out.println(responseBean.getData().toString());
     }
 
     @Test
     public void testDepartmentMapper(){
-        Department department = new Department();
-        Department department1 = new Department();
-        department.setDepartmentName("丽水学院");
-        department1.setDepartmentName("工学院");
-        department1.setSuperId(1);
-        departmentMapper.insertDepartment(department);
-        departmentMapper.insertDepartment(department1);
-        System.out.println("得到所有部门信息"+departmentMapper.getAllDepartments().toString());
+//        Department department = new Department();
+//        Department department1 = new Department();
+//        department.setDepartmentName("丽水学院");
+//        department1.setDepartmentName("工学院");
+//        department1.setSuperId(1);
+//        departmentMapper.insertDepartment(department);
+//        departmentMapper.insertDepartment(department1);
+//        System.out.println("得到所有部门信息"+departmentMapper.getAllDepartments().toString());
     }
 
     @Test
@@ -88,27 +99,6 @@ public class DocManagementApplicationTests {
             System.out.println("----------标签插入失败");
         }
 
-//        List<DocLabel> docLabels = docLabelMapper.getAllDocLabels();
-//        if(docLabels != null){
-//            System.out.println("----------查询成功");
-//            System.out.println(docLabels.toString());
-//        }else{
-//            System.out.println("----------查询失败");
-//        }
-//
-//        int sum3 = docLabelMapper.editDocLabel(docLabelNew);
-//        if(sum3 > 0){
-//            System.out.println("----------标签修改成功");
-//        }else{
-//            System.out.println("----------标签修改失败");
-//        }
-//
-//        int sum2 = docLabelMapper.delDocLabel(docLabel);
-//        if(sum2 > 0){
-//            System.out.println("----------标签删除成功");
-//        }else{
-//            System.out.println("----------标签删除失败");
-//        }
     }
 
     @Test
@@ -124,5 +114,58 @@ public class DocManagementApplicationTests {
 //        System.out.println(docLabelService.delDocLabel(docLabel).toString());
         System.out.println(docLabelService.getSonDocLabels(19));
     }
+
+    @Test
+    public void getDepartmentNameById(){
+        int num = 1;
+        System.out.println(departmentMapper.getDepartmentNameById(num));
+    }
+
+    @Test
+    public void getdepartmentID(){
+        String name = "工学院";
+       System.out.print(departmentMapper.getDepartmentIdByName(name)); ;
+    }
+
+    @Test
+    public void getUserGroupId(){
+        String name = "admin";
+        System.out.println(userGroupMapper.getUserGroupName(name));
+    }
+
+
+    @Test
+    public void testdeleteuser(){
+        int id = 5;
+        System.out.println(userMapper.deleteUserById(5));
+    }
+
+
+    @Test
+    public void insertUser(){
+        User user = new User();
+        user.setUserName("sda");
+        user.setUserPassword("123");
+        user.setUserLock(0);
+        user.setGroupId(1);
+        user.setDepartmentId(1);
+        System.out.print( userMapper.insertUser(user));
+
+    }
+
+    @Test
+    public void getDepartmentTree(){
+        System.out.println(departmentService.getDepartmentsTree());
+//        System.out.println(departmentService.getAllDepartments());
+    }
+
+    public void insertManyToMany(){
+        DocInfoAndDocLabel docInfoAndDocLabel = new DocInfoAndDocLabel();
+        docInfoAndDocLabel.setDocId(5);
+        docInfoAndDocLabel.setdLabelId(19);
+
+    }
+
+
 
 }

@@ -12,4 +12,8 @@
     <select id="getUserGroupById" resultMap="UserGroupMap">
         SELECT * FROM `userGroup` WHERE group_id = #{id}
     </select>
+
+    <select id="getUserGroupName" resultType="java.lang.Integer">
+        select group_id from userGroup where group_name = #{name}
+    </select>
 </mapper>

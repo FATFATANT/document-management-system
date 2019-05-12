@@ -5,10 +5,10 @@
 <mapper namespace="top.catoy.docmanagement.mapper.DepartmentMapper">
 
     <resultMap id="DepartmentMap" type="Department">
-        <id column="departmentId" property="departmentId"></id>
-        <result column="department_id" property="departmentId"></result>
-        <result column="department_name" property="departmentName"></result>
-        <result column="super_id" property="superId"></result>
+        <id column="department_Id" property="id"></id>
+        <result column="department_description" property="instroduction"></result>
+        <result column="department_name" property="name"></result>
+        <result column="super_id" property="parent_id"></result>
     </resultMap>
     <delete id="deleteDepartmentById"></delete>
 
@@ -19,5 +19,15 @@
     <insert id="insertDepartment" parameterType="Department" keyProperty="departmentId" useGeneratedKeys="true">
         INSERT INTO department(department_name,super_id) VALUES(#{departmentName},#{superId})
     </insert>
+
+    <select id="getDepartmentNameById" resultType="java.lang.String">
+        SELECT department_name FROM `department` WHERE department_id = #{id};
+    </select>
+
+    <select id="getDepartmentIdByName" resultType="java.lang.Integer">
+        select department_id FROM `department` WHERE department_name = #{name};
+
+    </select>
+
 
 </mapper>

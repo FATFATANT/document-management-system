@@ -12,7 +12,16 @@ import top.catoy.docmanagement.domain.User;
 public interface UserService{
    User getUserByName(String userName);
 
-   ResponseBean getAllUsers();
+   ResponseBean getAllUsers(int page);
 
    ResponseBean Login(String username, String password);
+
+   int deleteUserById(int id);
+
+   public int insertUser(User user);
+
+
+   public int update(User user);
+
+
 }

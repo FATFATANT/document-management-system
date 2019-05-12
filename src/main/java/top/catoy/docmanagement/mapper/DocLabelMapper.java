@@ -26,4 +26,6 @@ public interface DocLabelMapper {
     List<DocLabel> getDocLabelBySuperId(@Param("superId") int superId);
 
     DocLabel getDocLabelById(@Param("id") int id);
+
+
 }

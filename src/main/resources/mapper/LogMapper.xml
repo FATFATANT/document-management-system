@@ -18,8 +18,40 @@
     </select>
 
     <select id="getAllLogs" resultMap="LogMap">
-        SELECT * FROM log
+        SELECT * FROM log ORDER BY log_id DESC
     </select>
+    <select id="getLogsBySearchParams" resultMap="LogMap" parameterType="LogSearchParams">
+        SELECT * FROM log
+        <where>
+            1 = 1
+                <if test="userId != 0">
+                    AND user_id = #{userId,jdbcType=INTEGER}
+                </if>
+                <if test="opName != null and opName !=''">
+                    AND op_name LIKE "%"#{opName,jdbcType=VARCHAR}"%"
+                </if>
+                <if test="opLabel != null and opLabel !=''">
+                    AND op_label LIKE "%"#{opLabel,jdbcType=VARCHAR}"%"
+                </if>
+                <if test="startTime != null and startTime !=''">
+                    <![CDATA[
+                        AND op_date >= #{startTime,jdbcType=TIMESTAMP}
+                        ]]>
+                </if>
+                <if test="endTime != null and endTime !=''">
+                    <![CDATA[
+                        AND op_date <= #{endTime,jdbcType=TIMESTAMP}
+                        ]]>
+                </if>
+        </where>
+        ORDER BY log_id DESC
+    </select>
+
+    <!--<select id="getLogsByUserOrLabel" parameterType="String" resultMap="LogMap">-->
+        <!--SELECT * FROM log WHERE  op_name LIKE #{searchParam} or op_label LIKE #{searchParam}-->
+    <!--</select>-->
+
+    <!--<select id="getLogsByTime"></select>-->
 
     <insert id="insertLog" parameterType="Log" useGeneratedKeys="true" keyProperty="logId">
         INSERT INTO log(user_id,op_name,op_label) VALUES(#{userId},#{opName},#{opLabel})
