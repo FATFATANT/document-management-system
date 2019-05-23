@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.catoy.docmanagement.mapper.DocInfoAndTagMapper">
+<resultMap id="DocInfoAndTagMap" type="top.catoy.docmanagement.domain.DocInfoAndTag">
+    <id column="id" property="id"></id>
+    <result column="docInfo_id" property="docInfo_id"></result>
+    <result column="tag_id" property="tag_id"></result>
+</resultMap>
+
+<insert id="insertDocInfoAndTag">
+    insert into docInfo_tag(docInfo_id,tag_id) values (#{docInfo_id},#{tag_id})
+</insert>
+
+<select id="getTagsByFileId" resultMap="DocInfoAndTagMap">
+    select tag_id from docInfo_tag where docInfo_id = #{fileId}
+</select>
+<select id="getDocIdByTagId" resultType="Integer">
+        SELECT docInfo_id FROM docInfo_tag
+        <where>
+            <choose>
+                <when test="tags != null and  tags.size!=0">
+                    tag_id IN
+                    <foreach collection="tags" item="tag"  open="(" separator="," close=")">
+                        #{tag.tagId}
+                    </foreach>
+                </when>
+                <otherwise>
+                    false
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+
+</mapper>

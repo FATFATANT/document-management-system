@@ -54,6 +54,7 @@ public class JWTUtil {
     public static User getUserInfo(String token){
         try{
             DecodedJWT jwt = JWT.decode(token);
+            int id = jwt.getClaim("userId").asInt();
             String username = jwt.getClaim("username").asString();
             String password = jwt.getClaim("password").asString();
             int departmentId = jwt.getClaim("DepartmentId").asInt();
@@ -62,6 +63,7 @@ public class JWTUtil {
             int isLock = jwt.getClaim("isLock").asInt();
 
             User user = new User();
+            user.setUserId(id);
             user.setUserName(username);
             user.setUserPassword(password);
             user.setDepartmentId(departmentId);
@@ -86,6 +88,7 @@ public class JWTUtil {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             // 附带username信息
             return JWT.create()
+                    .withClaim("userId",user.getUserId())
                     .withClaim("username", user.getUserName())
                     .withClaim("password",user.getUserPassword())
                     .withClaim("DepartmentId",user.getDepartmentId())

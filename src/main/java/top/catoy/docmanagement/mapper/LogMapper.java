@@ -16,6 +16,7 @@ public interface LogMapper {
 
     List<Log> getAllLogs();
 
+
 //    List<Log> getLogsByUserOrLabel(@Param("searchParam") String searchParam);
 
 //    List<Log> getLogsByTime(Date start,Date end);

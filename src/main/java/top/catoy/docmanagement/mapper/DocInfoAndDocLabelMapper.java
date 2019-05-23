@@ -21,10 +21,6 @@ public interface DocInfoAndDocLabelMapper {
     List<DocInfo> getAllFileOfTags(@Param("tagid") int tagid);
 
 
-
-
-
-
-
+    List<Integer> getDocInfoIdByLabelId(@Param("docLabels") List<DocLabel> docLabels);
 
 }

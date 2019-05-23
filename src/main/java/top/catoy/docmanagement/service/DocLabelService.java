@@ -4,6 +4,7 @@ import top.catoy.docmanagement.domain.DocLabel;
 import top.catoy.docmanagement.domain.ResponseBean;
 
 import javax.print.Doc;
+import java.util.List;
 
 public interface DocLabelService {
     ResponseBean insertDocLabel(DocLabel docLabel);
@@ -18,7 +19,13 @@ public interface DocLabelService {
 
     ResponseBean getAllDocLabels();
 
+    ResponseBean getDocLabelsTree();
+
     ResponseBean getSonDocLabels(int superId);
 
     ResponseBean getDocLabelById(int id);
+
+    public List<DocLabel> getLabelByName(String []labels);
+
+    List<DocLabel> getChild(int id, List<DocLabel> fatherList);
 }

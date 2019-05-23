@@ -9,7 +9,7 @@
     </resultMap>
 
     <insert id="insertDocInfoAndDocLabel">
-       insert into docInfo_docLabel(label_id,docId) values (#{labelId},#{docId})
+       insert into docInfo_docLabel(label_id,doc_id) values (#{labelId},#{docId})
     </insert>
 
     <select id="getAllTagsOfFile" resultType="top.catoy.docmanagement.domain.DocLabel">
@@ -20,5 +20,20 @@
         select * from docInfo_docLabel where label_id = #{tagid}
     </select>
 
-
+    <select id="getDocInfoIdByLabelId" resultType="Integer" parameterType="java.util.List">
+        SELECT doc_id FROM docInfo_docLabel
+        <where>
+            <choose>
+                <when test="docLabels != null and  docLabels.size!=0">
+                    label_id IN
+                    <foreach collection="docLabels" item="docLabel"  open="(" separator="," close=")">
+                        #{docLabel.docLabelId}
+                    </foreach>
+                </when>
+                <otherwise>
+                    false
+                </otherwise>
+            </choose>
+        </where>
+    </select>
 </mapper>

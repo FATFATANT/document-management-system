@@ -14,4 +14,8 @@ public interface DepartmentService {
      ResponseBean getAllDepartments();
 
      ResponseBean getDepartmentsTree();
+
+     public List<Department> getTopDepartment();
+
+     List<Department> getChild(int id, List<Department> fatherList);
 }

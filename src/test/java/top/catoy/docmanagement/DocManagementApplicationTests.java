@@ -1,16 +1,17 @@
 package top.catoy.docmanagement;
 
+import javafx.concurrent.Task;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Timed;
 import org.springframework.test.context.junit4.SpringRunner;
 import top.catoy.docmanagement.domain.*;
 import top.catoy.docmanagement.mapper.*;
-import top.catoy.docmanagement.service.DepartmentService;
-import top.catoy.docmanagement.service.DocLabelService;
-import top.catoy.docmanagement.service.LogService;
+import top.catoy.docmanagement.service.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -31,6 +32,8 @@ public class DocManagementApplicationTests {
     @Autowired
     private DocLabelService docLabelService;
 
+    @Autowired
+    private DocInfoMapper docInfoMapper;
 
     @Autowired
     private UserMapper userMapper;
@@ -41,7 +44,23 @@ public class DocManagementApplicationTests {
     @Autowired
     private DepartmentService departmentService;
 
+    @Autowired
+    private TagService tagService;
 
+    @Autowired
+    private DocInfoAndTagService docInfoAndTagService;
+
+    @Autowired
+    private DocInfoAndDocLabelService docInfoAndDocLabelService;
+
+    @Autowired
+    private DocInfoService docInfoService;
+
+    @Autowired
+    private DocInfoAndDocLabelMapper docInfoAndDocLabelMapper;
+
+    @Autowired
+    private  DocInfoAndTagMapper docInfoAndTagMapper;
 
     @Test
     public void contextLoads() {
@@ -112,7 +131,9 @@ public class DocManagementApplicationTests {
 //        docLabel = docLabelNew;
 //        System.out.println(docLabelService.getAllDocLabels().toString());
 //        System.out.println(docLabelService.delDocLabel(docLabel).toString());
-        System.out.println(docLabelService.getSonDocLabels(19));
+//        System.out.println(docLabelService.getSonDocLabels(19));
+        ResponseBean responseBean = docLabelService.getDocLabelsTree();
+        System.out.println(responseBean.toString());
     }
 
     @Test
@@ -163,8 +184,108 @@ public class DocManagementApplicationTests {
         DocInfoAndDocLabel docInfoAndDocLabel = new DocInfoAndDocLabel();
         docInfoAndDocLabel.setDocId(5);
         docInfoAndDocLabel.setdLabelId(19);
-
     }
+
+
+    @Test
+    public void getTopDepartment(){
+        List list = departmentService.getTopDepartment();
+        for(int i = 0;i < list.size();i++){
+            System.out.println(list.get(i));
+        }
+    }
+
+
+    @Test
+    public void getSuffixName(){
+        String str = "996.icx.xls";
+        int pos = str.lastIndexOf('.');
+        String news = str.substring(pos);
+        System.out.println(news);
+        System.out.println(pos);
+    }
+
+    @Test
+    public void TestDocInfoMapper(){
+        List<Integer> docLabels = new ArrayList<>();
+        List<Tag> tags = new ArrayList<>();
+//        Tag tag = new Tag();
+//        Tag tag2 = new Tag();
+//        tag.setTagId(1);
+//        tag2.setTagId(2);
+//        tags.add(tag);
+//        tags.add(tag2);
+//        DocLabel docLabel = new DocLabel();
+//        DocLabel doclabel2 = new DocLabel();
+//        docLabel.setDocLabelId(19);
+//        doclabel2.setDocLabelId(20);
+//        docLabels.add(docLabel);
+//        docLabels.add(doclabel2);
+//        docLabels.add(19);
+//        docLabels.add(20);
+//        docInfoMapper.getDocByDepartmentIdAndSearchParam(17,"","2019",docLabels,tags);
+    }
+
+    @Test
+    public void DocInfoService(){
+//        String param = "{docLabels=[], tags=[], departmentId=-1, DocName='123', selectYear='2010', pageInfo=PageInfo{currentPage=1, pageSize=6, total=0, list=null}";
+        DocInfoSearchParams docInfoSearchParams = new DocInfoSearchParams();
+        List<DocLabel> docLabels = new ArrayList<>();
+        List<Tag> tags = new ArrayList<>();
+        Tag tag = new Tag();
+        Tag tag1 = new Tag();
+        tag.setTagId(1);
+        tag1.setTagId(2);
+        tags.add(tag);
+        tags.add(tag1);
+        DocLabel docLabel = new DocLabel();
+        DocLabel docLabel2 = new DocLabel();
+        docLabel.setDocLabelId(19);
+        docLabel2.setDocLabelId(20);
+        docLabels.add(docLabel);
+        docLabels.add(docLabel2);
+        docInfoSearchParams.setDepartmentId(2);
+        PageInfo pageInfo = new PageInfo();
+        pageInfo.setPageSize(7);
+        pageInfo.setCurrentPage(1);
+        docInfoSearchParams.setDocLabels(docLabels);
+        docInfoSearchParams.setPageInfo(pageInfo);
+        docInfoSearchParams.setTags(tags);
+        docInfoSearchParams.setSelectYear("Invalid date");
+
+//        docInfoSearchParams.setSelectYear("3000");
+        ResponseBean responseBean = docInfoService.getDocsBySearchParam(docInfoSearchParams);
+        System.out.println(responseBean.toString());
+    }
+
+    @Test
+    public void testDocInfoDocLabelmapper(){
+        List<DocLabel> docLabels = new ArrayList<>();
+        DocLabel docLabel = new DocLabel();
+        DocLabel docLabel2 = new DocLabel();
+        docLabel.setDocLabelId(1);
+        docLabel2.setDocLabelId(2);
+//        docLabels.add(docLabel);
+//        docLabels.add(docLabel2);
+        List<Integer> integers = docInfoAndDocLabelMapper.getDocInfoIdByLabelId(docLabels);
+        System.out.println(integers.toString());
+    }
+
+    @Test
+    public void testTagAndDocLabelMapper(){
+        List<Tag> tags = new ArrayList<>();
+        Tag tag = new Tag();
+        Tag tag1 = new Tag();
+        tag.setTagId(1);
+        tag1.setTagId(2);
+        tags.add(tag);
+        tags.add(tag1);
+        System.out.println(docInfoAndTagMapper.getDocIdByTagId(tags).toString());
+    }
+
+
+
+
 
 
 

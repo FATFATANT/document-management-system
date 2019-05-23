@@ -3,6 +3,7 @@ package top.catoy.docmanagement.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.catoy.docmanagement.domain.Department;
+import top.catoy.docmanagement.domain.DocInfo;
 import top.catoy.docmanagement.domain.ResponseBean;
 import top.catoy.docmanagement.mapper.DepartmentMapper;
 import top.catoy.docmanagement.service.DepartmentService;
@@ -40,6 +41,8 @@ public class DepartmentServiceImpl implements DepartmentService {
         }
     }
 
+
+
     @Override
     public ResponseBean getDepartmentsTree() {
         try {
@@ -65,7 +68,13 @@ public class DepartmentServiceImpl implements DepartmentService {
         }
     }
 
-    private List<Department> getChild(int id, List<Department> fatherList) {
+    @Override
+    public List<Department> getTopDepartment() {
+        return departmentMapper.getTopDepartmemt();
+    }
+
+    @Override
+    public List<Department> getChild(int id, List<Department> fatherList) {
         List<Department> childList = new ArrayList<>();
         int count = 0;
         for (Department department : fatherList) {

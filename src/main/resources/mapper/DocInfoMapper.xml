@@ -9,11 +9,61 @@
         <result column="doc_savepath" property="docSavePath"></result>
         <result column="user_id" property="userId"></result>
         <result column="suffix_name" property="suffixName"></result>
+        <result column="department_id" property="departmentId"></result>
+        <result column="doc_postTime" property="docPostTime"></result>
     </resultMap>
 
     <insert id="insertDocInfo" parameterType="top.catoy.docmanagement.domain.DocInfo">
-        INSERT INTO docInfo(doc_name,doc_savepath,user_id,suffix_name) VALUES(##{docName},#{docSavePath},#{userId},#{suffixName});
+        INSERT INTO docInfo(doc_name,doc_savepath,user_id,suffix_name,department_id) VALUES(#{docName},#{docSavePath},#{userId},#{suffixName},#{departmentId});
     </insert>
+
+    <select id="getAllDocInfo" resultMap="DocInfoMap">
+        SELECT * FROM docInfo
+    </select>
+
+    <select id="getDocByDepartmentId" resultMap="DocInfoMap" parameterType="int">
+        SELECT * FROM docInfo WHERE department_id = #{departmentId}
+    </select>
+
+    <select id="getDocByDepartmentIdAndSearchParam" resultMap="DocInfoMap">
+        SELECT * FROM docInfo
+        <where>
+            1 = 1
+               AND docInfo.department_id = #{departmentId}
+            <if test="docName != null and docName !=''">
+                AND docInfo.doc_name LIKE "%"#{docName,jdbcType=VARCHAR}"%"
+            </if>
+            <if test="docPostTime != null and docPostTime !=''">
+                <![CDATA[
+                    AND year(docInfo.doc_postTime) = #{docPostTime,jdbcType=TIMESTAMP}
+                    ]]>
+            </if>
+            <if test="docLabels != null and  docLabels.size!=0">
+                AND docInfo.doc_id IN
+                <foreach collection="docLabels" item="docLabelId" open="(" close=")" separator=",">
+                    <!--SELECT doc_id FROM docInfo_docLabel WHERE label_id = #{docLabel.docLabelId}-->
+                    #{docLabelId}
+                </foreach>
+            </if>
+            <if test="tags != null and  tags.size!=0">
+                AND docInfo.doc_id IN
+                <foreach collection="tags" item="tagId" open="(" close=")" separator=",">
+                    <!--SELECT docInfo_id FROM docInfo_tag WHERE tag_id = #{tag.tagId}-->
+                    #{tagId}
+                </foreach>
+            </if>
+        </where>
+        ORDER BY doc_postTime DESC
+    </select>
+
+
+    <select id="getDocId" resultType="java.lang.Integer">
+        select doc_id from docInfo where doc_name = #{docName}
+    </select>
+
+    <select id="getDocIdByName" resultType="java.lang.Integer">
+
+    </select>
 
 
 </mapper>

@@ -96,6 +96,8 @@ public class UserServiceImpl implements UserService {
                 if(user.getUserPassword().equals(password)){
                     UserGroup userGroup = userGroupMapper.getUserGroupById(user.getGroupId());
                     User userInfo = new User();
+                    userInfo.setUserId(user.getUserId());
+                    userInfo.setDepartmentId(user.getDepartmentId());
                     userInfo.setUserName(user.getUserName());
                     userInfo.setUserPassword(user.getUserPassword());
                     userInfo.setUserLock(user.getUserLock());

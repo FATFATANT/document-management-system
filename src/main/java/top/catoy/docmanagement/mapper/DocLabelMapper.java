@@ -27,5 +27,9 @@ public interface DocLabelMapper {
 
     DocLabel getDocLabelById(@Param("id") int id);
 
+    public List<DocLabel> getLabelsByName(@Param("labels") String[] labels);
+
+    public DocLabel getLabelByName(@Param("label") String label);
+
 
 }

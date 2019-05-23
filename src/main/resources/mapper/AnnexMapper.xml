@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.catoy.docmanagement.mapper.AnnexMapper">
+
+    <resultMap id="AnnexMap" type="Annex">
+        <id column="annex_id" property="annexId"></id>
+        <result column="annex_name" property="annexName"></result>
+        <result column="annex_path" property="annexPath"></result>
+        <result column="doc_id" property="docId"></result>
+    </resultMap>
+    <insert id="insertAnnex">
+        insert into annex(annex_name,annex_path,doc_id) values(#{annexName},#{annexPath},#{docId})
+    </insert>
+
+    <!--<delete id="delAnnexById" parameterType="int ">-->
+        <!--DELETE FROM annex WHERE annex_id = #{annexId}-->
+    <!--</delete>-->
+
+    <select id="getAnnexsByDocId" resultMap="AnnexMap">
+        SELECT * FROM  annex WHERE doc_id = #{docId}
+    </select>
+
+</mapper>

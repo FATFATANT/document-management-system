@@ -25,7 +25,9 @@ import top.catoy.docmanagement.service.UserService;
 import top.catoy.docmanagement.utils.FileDownLoadUtil;
 import top.catoy.docmanagement.utils.JWTUtil;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @RestController
 public class UserController {
@@ -57,7 +59,6 @@ public class UserController {
                               @RequestParam("password")String password) {
 
         ResponseBean result = userService.Login(username,password);
-        System.out.println(result);
         if(result.getMsg().equals("用户已锁定")){
             return new ResponseBean(ResponseBean.NOT_LEGAL,"用户已锁定",null);
         }
@@ -66,6 +67,7 @@ public class UserController {
         }
         if(result.getMsg().equals("登录成功")){
                 String token = JWTUtil.sign((User) result.getData(),serct);
+
                 return new ResponseBean(ResponseBean.SUCCESS, "登陆成功", JWTUtil.sign((User) result.getData(), serct));
             }else {
                 return new ResponseBean(ResponseBean.FAILURE,"登录失败",null);
@@ -88,7 +90,7 @@ public class UserController {
 //    @RequiresRoles("admin")
     public ResponseBean deleteUserById(@Param("userId") int userId) throws UnauthenticatedException {
         Subject subject = SecurityUtils.getSubject();
-        if(subject.hasRole("admin")){
+        if(subject.hasRole("管理员")){
             int result = userService.deleteUserById(userId);
             if(result > 0 ){
                 return new ResponseBean(ResponseBean.SUCCESS,"删除成功",null);
@@ -103,7 +105,7 @@ public class UserController {
     @PostMapping("/public/createUser")
     public ResponseBean createUser(@RequestBody UsertableInfo usertableInfo){
         Subject subject = SecurityUtils.getSubject();
-        if(subject.hasRole("admin")){
+        if(subject.hasRole("管理员")){
             System.out.println(usertableInfo+"-----------------------------------------------------------");
             User user = new User();
             user.setUserName(usertableInfo.getUserName());
@@ -128,7 +130,7 @@ public class UserController {
     @PostMapping("/public/updateUserMessage")
     public ResponseBean updateUserMessage(@RequestBody UsertableInfo usertableInfo){
         Subject subject = SecurityUtils.getSubject();
-        if(subject.hasRole("admin")){
+        if(subject.hasRole("管理员")){
             System.out.println(usertableInfo);
             User user = new User();
             user.setUserId(usertableInfo.getUserId());

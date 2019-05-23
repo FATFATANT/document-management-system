@@ -11,6 +11,7 @@ import top.catoy.docmanagement.domain.User;
 import top.catoy.docmanagement.mapper.LogMapper;
 import top.catoy.docmanagement.mapper.UserMapper;
 import top.catoy.docmanagement.service.LogService;
+import top.catoy.docmanagement.service.UserService;
 
 import java.util.Date;
 import java.util.List;
@@ -29,10 +30,16 @@ public class LogServiceImpl implements LogService {
     @Override
     public ResponseBean insertLog(int userId, String opName, String opLabel) {
        try {
+           String userName = "";
+           User user = userMapper.selectUserById(userId);
+           if(user != null){
+               userName = user.getUserName();
+           }
            Log log = new Log();
            log.setUserId(userId);
            log.setOpName(opName);
            log.setOpLabel(opLabel);
+           log.setUserName(userName);
            int sum = logMapper.insertLog(log);
            if(sum > 0){
                return new ResponseBean(ResponseBean.SUCCESS,"日志插入成功",null);
@@ -50,13 +57,6 @@ public class LogServiceImpl implements LogService {
             PageHelper.startPage(currentPage, pageSize);
             List<Log> logs = logMapper.getAllLogs();
             if(logs!=null){
-                logs.forEach((log) -> {
-                    User user = userMapper.selectUserById(log.getUserId());
-                    if(user != null){
-                        String userName =user.getUserName();
-                        log.setUserName(userName);
-                    }
-                });
                 PageInfo<Log> pageInfo = new PageInfo<>(logs);
                 return new ResponseBean(ResponseBean.SUCCESS,"查询成功",pageInfo);
             }else {
@@ -70,18 +70,19 @@ public class LogServiceImpl implements LogService {
     @Override
     public ResponseBean getLogsBySearchParam(LogSearchParams logSearchParams) {
         try {
-            if(logSearchParams.getUserName().length()>0){
-                User user = userMapper.getUserByName(logSearchParams.getUserName());
-                System.out.println("user-----"+user!=null);
-                if(user != null){
-                    int userId = user.getUserId();
-                    logSearchParams.setUserId(userId);
-                }else {
-                    logSearchParams.setUserId(-1);
-                    System.out.println("logSearchParams.setUserId(-1)");
-                }
-            }
-            System.out.println("UserId----------"+logSearchParams.getUserId());
+//            if(logSearchParams.getUserName().length()>0){
+//                User user = logMapper.ge(logSearchParams.getUserName());
+//                System.out.println("user-----"+user!=null);
+//                if(user != null){
+//                    int userId = user.getUserId();
+//                    logSearchParams.setUserId(userId);
+//                }else {
+//                    logSearchParams.setUserId(-1);
+//                    System.out.println("logSearchParams.setUserId(-1)");
+//                }
+//            }
+//            System.out.println("UserId----------"+logSearchParams.getUserId());
+            PageHelper.startPage(logSearchParams.getCurrentPage(), logSearchParams.getPageSize());
             List<Log> logs = logMapper.getLogsBySearchParams(logSearchParams);
             if(logs != null){
                 logs.forEach((log) -> {
@@ -91,7 +92,6 @@ public class LogServiceImpl implements LogService {
                         log.setUserName(userName);
                     }
                 });
-                PageHelper.startPage(logSearchParams.getCurrentPage(), logSearchParams.getPageSize());
                 PageInfo<Log> pageInfo = new PageInfo<>(logs);
                 return new ResponseBean(ResponseBean.SUCCESS,"查询成功",pageInfo);
             }else {

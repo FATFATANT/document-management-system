@@ -7,6 +7,7 @@ import top.catoy.docmanagement.domain.ResponseBean;
 import top.catoy.docmanagement.mapper.DocLabelMapper;
 import top.catoy.docmanagement.service.DocLabelService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -99,6 +100,56 @@ public class DocLabelServiceImpl implements DocLabelService {
     }
 
     /**
+     * 得到分类树
+     * @return
+     */
+    @Override
+    public ResponseBean getDocLabelsTree() {
+        try {
+            List<DocLabel> docLabels = docLabelMapper.getAllDocLabels();
+            List<DocLabel> fatherList = new ArrayList<>();
+            if(docLabels != null){
+                docLabels.forEach((docLabel) ->{
+                    if (docLabel.getSuperId() == 0){
+                        fatherList.add(docLabel);
+                    }
+                });
+                for (DocLabel docLabel : fatherList) {
+                    docLabel.setChildren(getChild(docLabel.getDocLabelId(), docLabels));
+                }
+                return new ResponseBean(ResponseBean.SUCCESS,"查询成功",fatherList);
+
+            }else {
+                return new ResponseBean(ResponseBean.FAILURE,"查询失败",null);
+            }
+
+        }catch (RuntimeException r){
+            r.printStackTrace();
+            return new ResponseBean(ResponseBean.ERROR,"错误",null);
+        }
+    }
+
+    @Override
+    public List<DocLabel> getChild(int id, List<DocLabel> fatherList) {
+        List<DocLabel> childList = new ArrayList<>();
+        int count = 0;
+        for (DocLabel docLabel : fatherList) {
+            // 遍历所有节点，将父id与传过来的id比较
+            if (docLabel.getSuperId()== id) {
+                childList.add(docLabel);
+            }
+        }
+        for (DocLabel docLabel : childList) {
+            docLabel.setChildren(getChild(docLabel.getDocLabelId(), fatherList));
+        } // 递归退出条件
+        if (childList.size() == 0) {
+            return null;
+        }
+        System.out.println(childList.toString());
+        return childList;
+    }
+
+    /**
      * 得到所有子标签
      * @param superId
      * @return
@@ -135,5 +186,11 @@ public class DocLabelServiceImpl implements DocLabelService {
         }catch (RuntimeException r){
             return new ResponseBean(ResponseBean.ERROR,"错误",null);
         }
+    }
+
+    @Override
+    public List<DocLabel> getLabelByName(String[] labels) {
+        List<DocLabel> docLabels = docLabelMapper.getLabelsByName(labels);
+        return docLabels;
     }
 }

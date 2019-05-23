@@ -8,6 +8,17 @@
         <result column="group_name" property="groupName"></result>
         <result column="group_permission" property="groupPermission"></result>
     </resultMap>
+    <insert id="addUserGroup">
+        insert into userGroup(group_name,group_permission) values (#{groupName},#{groupPermission})
+    </insert>
+
+    <update id="updateUserGroup">
+        update userGroup set group_permission = #{groupPermission} where group_name = #{groupName}
+    </update>
+
+    <delete id="deleteUserGroup">
+        DELETE FROM `userGroup` WHERE group_name = #{groupName}
+    </delete>
 
     <select id="getUserGroupById" resultMap="UserGroupMap">
         SELECT * FROM `userGroup` WHERE group_id = #{id}
@@ -15,5 +26,8 @@
 
     <select id="getUserGroupName" resultType="java.lang.Integer">
         select group_id from userGroup where group_name = #{name}
+    </select>
+    <select id="getAllUserGroup" resultMap="UserGroupMap">
+        select * from userGroup
     </select>
 </mapper>

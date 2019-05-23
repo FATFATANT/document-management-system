@@ -1,5 +1,7 @@
 package top.catoy.docmanagement.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
 /**
@@ -8,9 +10,12 @@ import java.util.List;
  * @create: 2019-04-26 08:58
  **/
 public class DocLabel {
+    @JsonProperty("id")
     private int docLabelId;
+    @JsonProperty("label")
     private String docLabelName;
     private int superId;
+    private List<DocLabel> children;
 
     private List<DocInfo> list;
 
@@ -46,12 +51,21 @@ public class DocLabel {
         this.superId = superId;
     }
 
+    public List<DocLabel> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<DocLabel> children) {
+        this.children = children;
+    }
+
     @Override
     public String toString() {
         return "DocLabel{" +
                 "docLabelId=" + docLabelId +
                 ", docLabelName='" + docLabelName + '\'' +
                 ", superId=" + superId +
+                ", children=" + children +
                 ", list=" + list +
                 '}';
     }
